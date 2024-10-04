@@ -16,7 +16,9 @@ class Submission(models.Model):
     filename = models.CharField(max_length=255, default="default_filename.cpp")
     source_code = models.TextField(default="No source code provided.")
     def __str__(self):
-        return f"Submission {self.filename}: {self.source_code}"
+        # Replace newlines with spaces to make the source code single-line
+        single_line_source_code = self.source_code.replace('\n', ' ').replace('\r', '')
+        return f"Submission of {self.dummy_id}: {self.filename}: {single_line_source_code}"
     def __repr__(self):
         return f"<Submission(id={self.id}, name='{self.filename}', description='{self.source_code}')>"
 
@@ -25,6 +27,8 @@ class Criteria(models.Model):
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
     title = models.CharField(max_length=255, default="Default Criterion Title")
     description = models.TextField(default="No description provided.")
+    def __str__(self):
+        return f"{self.title} (ID: {self.id}) (Description: {self.description})"
 
 class Rating(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -32,6 +36,8 @@ class Rating(models.Model):
     description = models.TextField(default="No description provided.")
     marks = models.IntegerField(default=0)
     criteria = models.ForeignKey(Criteria, on_delete=models.CASCADE)
+    def __str__(self):
+        return f"{self.title} (ID: {self.id}) (Description: {self.description}) (Marks: {self.marks})"
 
 class GradingHistory(models.Model):
     id = models.AutoField(primary_key=True)
